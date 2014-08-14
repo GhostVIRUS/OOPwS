@@ -6,12 +6,14 @@ Folder/files info:
 		> core -- functional
 			> gui
 			> classes
+				> middleclass.lua -- OOP implementation in Lua
 			> auxiliary
 		> levels -- screenplay, dialogs, map-builders for each level
 			> *levelname*
 				> dialogs
 				> map
 				> screenplay
+				> init.lua -- initializes the level
 		> start.lua -- init file
 	> sounds -- music and sounds
 		> *TODO*
