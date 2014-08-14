@@ -7,6 +7,8 @@ Folder/files info:
 			> gui
 			> classes
 				> middleclass.lua -- OOP implementation in Lua
+				> object
+				> concrete
 			> auxiliary
 		> levels -- screenplay, dialogs, map-builders for each level
 			> *levelname*
