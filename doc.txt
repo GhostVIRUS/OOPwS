@@ -1,0 +1,20 @@
+Documentation for OOPwS project
+
+Folder/files info:
+> WS -- root folder
+	> scripts -- lua scripts
+		> core -- functional
+			> gui
+			> classes
+			> auxiliary
+		> levels -- screenplay, dialogs, map-builders for each level
+			> *levelname*
+				> dialogs
+				> map
+				> screenplay
+		> start.lua -- init file
+	> sounds -- music and sounds
+		> *TODO*
+	> textures -- themes, textures, sprites
+		> *TODO*
+> War System.lua -- File for launching the campaign in TZOD
