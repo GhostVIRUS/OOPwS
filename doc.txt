@@ -4,16 +4,17 @@ Folder/files info:
 > WS -- root folder
 	> scripts -- lua scripts
 		> core -- functional
-			> gui
-			> classes
+			> gui -- classes and functions that provide menu, messages, controls
+			> gameplay -- classes and functions that provide something cool
 				> middleclass.lua -- OOP implementation in Lua
-				> object
-				> concrete
+				> *classname*.lua
 			> auxiliary
+				> globals.lua
+				> resets.lua
 		> levels -- screenplay, dialogs, map-builders for each level
 			> *levelname*
-				> dialogs
-				> map
+				> speaks
+				> maps
 				> screenplay
 				> init.lua -- initializes the level
 		> start.lua -- init file

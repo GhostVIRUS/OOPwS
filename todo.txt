@@ -1,5 +1,3 @@
 TODO
 
 1. Create beta-version of folder structure. ( +/- )
-2. Develop TZOD objects classes. ( )
-3. Create map. ( )

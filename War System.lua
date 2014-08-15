@@ -1,20 +1,14 @@
 -- Launcher of War System campaign
 reset()
---[[
-function unrequire(module)
-	if module == 'all' then
-		for i=1, #package.loaded do
-			package.loaded[i] = nil
-			_G[i] = nil
-		end
-	else
-		package.loaded[module] = nil
-		_G[module] = nil
-	end
-end
-
-unrequire('all')]]
-
 print('--- Launching War System ---')
 print('----------------------------')
+print('-- Loading \'globals.lua\' --')
+dofile('campaign/WS/scripts/core/auxiliary/globals.lua')
+print('-- Loading \'resets.lua\' --')
+dofile(path.aux..'resets.lua')
+print('-- Clearing \'package.loaded\' (unloading modules) --')
+unrequire('all')
+reset()
+conf.sv_nightmode = false
+
 dofile('campaign/WS/scripts/start.lua')
