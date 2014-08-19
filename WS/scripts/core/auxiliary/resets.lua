@@ -2,9 +2,9 @@
 
 function unrequire(module) -- unloads all/chosen modules (classes)
 	if module == 'all' then
-		for i=1, #package.loaded do
-			package.loaded[i] = nil
-			_G[i] = nil
+		for key,_ in pairs(package.loaded) do
+			package.loaded[key] = nil
+			_G[key] = nil
 		end
 	else
 		package.loaded[module] = nil

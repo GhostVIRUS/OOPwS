@@ -4,7 +4,7 @@ print('-- Launching \'Demo\' level --')
 newmap(100, 100)
 
 require('walls')
-require('turrets')
+require('turret')
 
 walls = {}
 turrets = {'turret_cannon', 'turret_rocket', 'turret_minigun', 'turret_gauss'}
