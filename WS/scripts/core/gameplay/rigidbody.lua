@@ -9,12 +9,8 @@ RigidBodyStatic = class('RigidBodyStatic')
 
 -- public methods
 function RigidBodyStatic:initialize(name, pos, props)
-	if props == nil then
-		props = {}
-	end
-	if props['name'] == nil then
-		props.name = name
-	end
+	props = props or {};
+	props["name"] = props["name"] or name
 
 	-- conditionally private members
 	self._name = name
@@ -24,6 +20,8 @@ function RigidBodyStatic:initialize(name, pos, props)
 	self._props = props
 
 	self._objectType = nil -- maybe this will not be needed
+
+	self._allowMoving = false -- just for fun... for now! heheh
 
 	return nil
 end
@@ -55,8 +53,8 @@ function RigidBodyStatic:setVisibility(value)
 	return nil
 end
 
-function RigidBodyStatic:move(pos, parameters) -- parameters.time in seconds; if time = 0 works as setposition
-	print(self._name..':move()')
+function RigidBodyStatic:getVector(pos) -- maybe should be renamed in getLine() or smth like that
+	print(self._name..':getVector()')
 	local xCathetus = pos.x - self._pos.x
 	local yCathetus = pos.y - self._pos.y
 	local hypotenuse = math.sqrt((xCathetus * xCathetus) + (yCathetus * yCathetus))
@@ -65,31 +63,67 @@ function RigidBodyStatic:move(pos, parameters) -- parameters.time in seconds; if
 		alpha = math.pi*2 - alpha
 	end
 
+	return hypotenuse, alpha
+end
+
+function RigidBodyStatic:move(pos, parameters) -- parameters.time in seconds; if time = 0 works as setposition
+	print(self._name..':move()')
+
+	self._allowMoving = true
+
+	local distance, angle = self:getVector(pos)
 	local currentTime = 0
 	local currentSpeed = 0
 	if parameters.time ~= nil then
-		currentSpeed = hypotenuse/(parameters.time*50)
+		currentSpeed = distance/(parameters.time*50)
 	else
 		currentSpeed = parameters.speed/50
 	end
 	if parameters.time == 0 then
-		currentSpeed = hypotenuse
+		currentSpeed = distance
 	end
-	for i = 1, hypotenuse, currentSpeed do
-		pushcmd( 
-			function()
-				self._pos.x = math.min(self._pos.x + math.cos(alpha)*currentSpeed, pos.x)
-				self._pos.y = math.min(self._pos.y + math.sin(alpha)*currentSpeed, pos.y)
-				self:_updatePos() -- instead of setposition
-			end, currentTime)
-		currentTime = currentTime + (1/50)
+	for i = 1, distance, currentSpeed do
+		if self._allowMoving then
+			pushcmd( 
+				function()
+					self._pos.x = math.min(self._pos.x + math.cos(angle)*currentSpeed, pos.x)
+					self._pos.y = math.min(self._pos.y + math.sin(angle)*currentSpeed, pos.y)
+					self:_updatePos() -- instead of setposition
+				end, currentTime)
+			currentTime = currentTime + (1/50)
+		end
 	end
+
+	self._allowMoving = false
+	return nil
+end
+
+function RigidBodyStatic:follow(whoName, speed, iteration) -- speed here and above in px/sec
+	if iteration == 0 then
+		print(self._name..'follow()')
+		self._allowMoving = true
+	end
+
+	pushcmd( function()
+		local whoX, whoY = position(whoName)
+		local distance, angle = self:getVector({ x = whoX, y = whoY }) -- rework access to position (maybe)
+		if distance > 8*32 then
+			self._pos.x = self._pos.x + math.cos(angle)*speed/100
+			self._pos.y = self._pos.y + math.sin(angle)*speed/100
+			self:_updatePos()
+		end
+
+		if self._allowMoving then
+			self:follow(whoName, speed, iteration)
+		end
+
+	end, 1/100)
 
 	return nil
 end
 
-function RigidBodyStatic:follow(who, speed)
-
+function RigidBodyStatic:stopMoving()
+	self._allowMoving = false
 end
 
 -- conditionally private methods

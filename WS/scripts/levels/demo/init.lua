@@ -24,12 +24,21 @@ pushcmd( function() walls['wall5']:setVisibility(true) end, 7)
 
 for i = 1, 4 do
 	turrets[i] = Turret:new('turret'..i, macro.GET32(5+i*2, 5, 'table'), turrets[i], { sight = i*20, team = i })
-	pushcmd( function() turrets[i]:setVisibility(true) end, i)
+--	pushcmd( function() turrets[i]:setVisibility(true) end, i)
 end
 
 for i = 1, 1000 do
 	pushcmd( function() walls['wall1']:setProperties({ corner = i%4 }) end, i/10)
 end
 
+classes['fat'] = tcopy(classes.default)
+classes['fat'].health = 10000
+
+actor('respawn_point', macro.GET32(10, 20))
+service('player_local', {nick = 'killero!', name = 'bitch', vehname = 'train', class = 'fat'})
+
+killingMachine = Turret:new('someFire', macro.GET32(2, 10, 'table'), 'turret_zippo', { sight = 50 })
+killingMachine:setVisibility(true)
+pushcmd( function() killingMachine:follow('train', 6.5*32, 0) end, 3)
 
 print('-- All scripts have been completed but pushcmd --')
