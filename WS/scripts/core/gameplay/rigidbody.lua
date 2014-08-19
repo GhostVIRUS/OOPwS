@@ -22,6 +22,7 @@ function RigidBodyStatic:initialize(name, pos, props)
 	self._objectType = nil -- maybe this will not be needed
 
 	self._allowMoving = false -- just for fun... for now! heheh
+	self._isMoving = false
 
 	return nil
 end
@@ -54,7 +55,7 @@ function RigidBodyStatic:setVisibility(value)
 end
 
 function RigidBodyStatic:getVector(pos) -- maybe should be renamed in getLine() or smth like that
-	print(self._name..':getVector()')
+--	print(self._name..':getVector()')
 	local xCathetus = pos.x - self._pos.x
 	local yCathetus = pos.y - self._pos.y
 	local hypotenuse = math.sqrt((xCathetus * xCathetus) + (yCathetus * yCathetus))
@@ -67,9 +68,9 @@ function RigidBodyStatic:getVector(pos) -- maybe should be renamed in getLine() 
 end
 
 function RigidBodyStatic:move(pos, parameters) -- parameters.time in seconds; if time = 0 works as setposition
-	print(self._name..':move()')
+	print(self._name..':move()'..tostring(self._allowMoving))
 
-	self._allowMoving = true
+	self._isMoving = true
 
 	local distance, angle = self:getVector(pos)
 	local currentTime = 0
@@ -83,7 +84,7 @@ function RigidBodyStatic:move(pos, parameters) -- parameters.time in seconds; if
 		currentSpeed = distance
 	end
 	for i = 1, distance, currentSpeed do
-		if self._allowMoving then
+--		if self._allowMoving == true then
 			pushcmd( 
 				function()
 					self._pos.x = math.min(self._pos.x + math.cos(angle)*currentSpeed, pos.x)
@@ -91,10 +92,10 @@ function RigidBodyStatic:move(pos, parameters) -- parameters.time in seconds; if
 					self:_updatePos() -- instead of setposition
 				end, currentTime)
 			currentTime = currentTime + (1/50)
-		end
+--		end
 	end
 
-	self._allowMoving = false
+	self._isMoving = false
 	return nil
 end
 
@@ -103,6 +104,7 @@ function RigidBodyStatic:follow(whoName, speed, iteration) -- speed here and abo
 		print(self._name..'follow()')
 		self._allowMoving = true
 	end
+	self._isMoving = true
 
 	pushcmd( function()
 		local whoX, whoY = position(whoName)
@@ -113,8 +115,10 @@ function RigidBodyStatic:follow(whoName, speed, iteration) -- speed here and abo
 			self:_updatePos()
 		end
 
+		self._isMoving = false
+
 		if self._allowMoving then
-			self:follow(whoName, speed, iteration)
+			self:follow(whoName, speed, 1)
 		end
 
 	end, 1/100)
@@ -122,7 +126,7 @@ function RigidBodyStatic:follow(whoName, speed, iteration) -- speed here and abo
 	return nil
 end
 
-function RigidBodyStatic:stopMoving()
+function RigidBodyStatic:stopMoving() -- doesn't work at RigidBody:move()
 	self._allowMoving = false
 end
 

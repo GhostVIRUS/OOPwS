@@ -39,6 +39,6 @@ service('player_local', {nick = 'killero!', name = 'bitch', vehname = 'train', c
 
 killingMachine = Turret:new('someFire', macro.GET32(2, 10, 'table'), 'turret_zippo', { sight = 50 })
 killingMachine:setVisibility(true)
-pushcmd( function() killingMachine:follow('train', 6.5*32, 0) end, 3)
+pushcmd( function() killingMachine:follow('train', 6*32, 0) end, 3)
 
 print('-- All scripts have been completed but pushcmd --')
