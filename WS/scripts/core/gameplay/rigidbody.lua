@@ -22,22 +22,23 @@ function RigidBodyStatic:initialize(name, pos, props)
 	self._link = link
 	self._isVisible = false
 	self._props = props
-	self._objType = nil -- maybe this is not needed
+
+	self._objectType = nil -- maybe this will not be needed
 
 	return nil
 end
 
 function RigidBodyStatic:getPosition()
-	return _pos
+	return self._pos
 end
 
-function RigidBodyStatic:setProperties(...) -- requires table property-value
-	for key, value in pairs(arg) do
-		_props[key] = value
+function RigidBodyStatic:setProperties(props) -- requires table property-value
+	for key, value in pairs(props) do
+		self._props[key] = value
 	end
 
-	if _isVisible == true then
-		updateProps(self)
+	if self._isVisible == true then
+		self:_updateProps()
 	end
 
 	return nil
@@ -107,6 +108,7 @@ end
 
 function RigidBodyStatic:_show()
 	print(self._name..':_show()')
+	self._link = actor(self._objectType, self._pos.x, self._pos.y, self._props)
 	self._isVisible = true
 	self:_saveProps()
 

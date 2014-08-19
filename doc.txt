@@ -1,5 +1,7 @@
 Documentation for OOPwS project
 
+Info is out of date
+
 Folder/files info:
 > WS -- root folder
 	> scripts -- lua scripts

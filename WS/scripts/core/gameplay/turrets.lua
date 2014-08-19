@@ -1,12 +1,28 @@
--- testfile
---[[
+---===Turrets===---
+-- includes
 local class = 
 require('middleclass')
-require('object')
+require('rigidbody')
 
-turret = class('turret', Object)
+---===Turret===---
+--declaring
+print('- Requiring \'Turret\' class -')
+Turret = class('Turret', RigidBodyStatic)
 
-function turret:initialize(name, pos, actorId, props)
-	Object.initialize(self, name, pos, props)
-	turret.setPrivate(self, 'actorId', actorId)
+-- public methods
+function Turret:initialize(name, pos, turretType, props)
+	assert(type(turretType) == 'string', 'bad argument #3 to\'Turret:initialize\' (\'string\' expected, got \''..type(turretType)..'\')')
+
+	RigidBodyStatic.initialize(self, name, pos, props)
+
+	self._objectType = turretType
+
+	return nil
+end
+
+--[[ conditionally private methods
+function Turret:_show()
+	RigidBodyStatic._show(self)
+
+	return nil
 end]]

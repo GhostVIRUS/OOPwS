@@ -4,9 +4,10 @@ print('-- Launching \'Demo\' level --')
 newmap(100, 100)
 
 require('walls')
---require('turrets')
+require('turrets')
 
 walls = {}
+turrets = {'turret_cannon', 'turret_rocket', 'turret_minigun', 'turret_gauss'}
 
 for i = 1, 10 do
 	if math.random() > 0.5 then
@@ -20,5 +21,15 @@ end
 
 pushcmd( function() walls['wall5']:setVisibility(false) end, 2)
 pushcmd( function() walls['wall5']:setVisibility(true) end, 7)
+
+for i = 1, 4 do
+	turrets[i] = Turret:new('turret'..i, macro.GET32(5+i*2, 5, 'table'), turrets[i], { sight = i*20, team = i })
+	pushcmd( function() turrets[i]:setVisibility(true) end, i)
+end
+
+for i = 1, 1000 do
+	pushcmd( function() walls['wall1']:setProperties({ corner = i%4 }) end, i/10)
+end
+
 
 print('-- All scripts have been completed but pushcmd --')
