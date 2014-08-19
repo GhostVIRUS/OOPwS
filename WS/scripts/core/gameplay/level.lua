@@ -1,35 +1,29 @@
+---===Level===---
 -- includes
 local class = 
 require('middleclass')
-
-require('map')
+--require('map')
 
 -- declaring
-print('- Creating \'Level\' class')
+print('- Requiring \'Level\' class')
 Level = class('Level')
 
--- private members
-local _id -- level folder's name
-
-local _maps = {} -- list of maps on this level
-local _currentMap
-
-local _characters = {} -- list of characters on this level
-
 -- public methods
-function Level:initialize(id, ...)
-	_id = id
-
+function Level:initialize(id)
+	
+	-- conditionally private members
+	self._id = id -- level folder's name
+	self._maps = {} -- list of maps on this level
+	self._currentMap = nil
+	self._characters = {} -- list of characters on this level
 	-- Note: maps, currentMap and characters are automaticly read while initializing
-	_maps = arg.maps
-	_currentMap = arg.currentMap
 end
 
 function Level:setMap(id)
-	_currentMap = id
+	self._currentMap = id
 	--maps[currentMap]:build() -- requires map class
 end
 
 function Level:run()
-	-- body
+	dofile(path.levels..self._id..'/init.lua')
 end
